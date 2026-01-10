@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agenda Personal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app-container">
+        
+        <header>
+            <button id="menu-btn"><i class="fas fa-bars"></i></button>
+            <h2 id="page-title">Mis Tareas</h2>
+            <div class="date-display" id="current-date">Hoy</div>
+        </header>
+
+        <div id="sidebar-overlay"></div>
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Organizador</h3>
+                <button id="close-sidebar"><i class="fas fa-times"></i></button>
+            </div>
+            <ul>
+                <li onclick="navigate('tasks')"><i class="fas fa-check-circle"></i> Tareas</li>
+                <li onclick="navigate('calendar')"><i class="fas fa-calendar-alt"></i> Calendario</li>
+                <li onclick="navigate('readings')"><i class="fas fa-book"></i> Lecturas</li>
+                <li onclick="navigate('pomodoro')"><i class="fas fa-stopwatch"></i> Pomodoro</li>
+                <li onclick="clearAllData()" class="danger-item"><i class="fas fa-trash-alt"></i> Borrar todo</li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>Datos guardados en este dispositivo.</p>
+            </div>
+        </nav>
+
+        <main>
+            <section id="tasks-section" class="view active-view">
+                <div id="task-list">
+                    <div class="empty-state" id="empty-tasks">No hay tareas pendientes</div>
+                </div>
+                <div class="fab-container">
+                    <button class="fab" onclick="openModal('task-modal')"><i class="fas fa-plus"></i></button>
+                </div>
+            </section>
+
+            <section id="calendar-section" class="view">
+                <div class="section-header">
+                    <h3>Próximos Eventos</h3>
+                </div>
+                <div id="event-list"></div>
+                <div class="fab-container">
+                    <button class="fab" onclick="openModal('event-modal')"><i class="fas fa-plus"></i></button>
+                </div>
+            </section>
+
+            <section id="readings-section" class="view">
+                <div class="section-header">
+                    <h3>Bibliografía</h3>
+                </div>
+                <div id="readings-list"></div>
+                <div class="fab-container">
+                    <button class="fab" onclick="openModal('reading-modal')"><i class="fas fa-plus"></i></button>
+                </div>
+            </section>
+
+            <section id="pomodoro-section" class="view">
+                <div class="pomodoro-container">
+                    <div class="timer-card">
+                        <div class="timer-display" id="timer">25:00</div>
+                        <div class="timer-controls">
+                            <button id="start-timer" onclick="startPomodoro()"><i class="fas fa-play"></i></button>
+                            <button id="pause-timer" onclick="pausePomodoro()"><i class="fas fa-pause"></i></button>
+                            <button id="reset-timer" onclick="resetPomodoro()"><i class="fas fa-redo"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="session-creator">
+                        <h4>Guardar Sesión</h4>
+                        <div class="input-group">
+                            <input type="text" id="pomo-session-name" placeholder="Ej: Unidad 1">
+                            <button onclick="savePomodoroSession()">Guardar</button>
+                        </div>
+                    </div>
+
+                    <div id="pomo-sessions-list">
+                        </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <h3>Nueva Tarea</h3>
+            <input type="text" id="new-task-input" placeholder="Escribí tu tarea..." autocomplete="off">
+            <div class="modal-actions">
+                <button onclick="closeModal('task-modal')" class="btn-cancel">Cancelar</button>
+                <button onclick="addTask()" class="btn-confirm">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <h3>Nuevo Evento</h3>
+            <input type="text" id="event-title" placeholder="Título (ej: Final Psicología)">
+            <input type="date" id="event-date">
+            <div class="modal-actions">
+                <button onclick="closeModal('event-modal')" class="btn-cancel">Cancelar</button>
+                <button onclick="addEvent()" class="btn-confirm">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reading-modal" class="modal">
+        <div class="modal-content">
+            <h3>Nueva Lectura</h3>
+            <input type="text" id="reading-title" placeholder="Título del texto/libro">
+            <div class="modal-actions">
+                <button onclick="closeModal('reading-modal')" class="btn-cancel">Cancelar</button>
+                <button onclick="addReading()" class="btn-confirm">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
