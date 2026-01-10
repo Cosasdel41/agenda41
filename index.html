@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agenda Personal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,9 +13,13 @@
     <div id="app-container">
         
         <header>
-            <button id="menu-btn"><i class="fas fa-bars"></i></button>
-            <h2 id="page-title">Mis Tareas</h2>
-            <div class="date-display" id="current-date">Hoy</div>
+            <div class="header-left">
+                <button id="menu-btn"><i class="fas fa-bars"></i></button>
+                <h2 id="page-title">Mis Tareas</h2>
+            </div>
+            <div class="header-right">
+                <button id="notif-btn" onclick="requestNotificationPermission()" title="Activar notificaciones"><i class="far fa-bell"></i></button>
+            </div>
         </header>
 
         <div id="sidebar-overlay"></div>
@@ -32,15 +36,20 @@
                 <li onclick="clearAllData()" class="danger-item"><i class="fas fa-trash-alt"></i> Borrar todo</li>
             </ul>
             <div class="sidebar-footer">
-                <p>Datos guardados en este dispositivo.</p>
+                <p>Datos locales en tu dispositivo</p>
             </div>
         </nav>
 
         <main>
             <section id="tasks-section" class="view active-view">
+                <div class="hint-text">Arrastra las tareas para ordenarlas</div>
                 <div id="task-list">
-                    <div class="empty-state" id="empty-tasks">No hay tareas pendientes</div>
+                    </div>
+                <div class="empty-state" id="empty-tasks" style="display:none;">
+                    <i class="fas fa-clipboard-check"></i>
+                    <p>No hay tareas pendientes</p>
                 </div>
+                
                 <div class="fab-container">
                     <button class="fab" onclick="openModal('task-modal')"><i class="fas fa-plus"></i></button>
                 </div>
@@ -84,9 +93,7 @@
                             <button onclick="savePomodoroSession()">Guardar</button>
                         </div>
                     </div>
-
-                    <div id="pomo-sessions-list">
-                        </div>
+                    <div id="pomo-sessions-list"></div>
                 </div>
             </section>
         </main>
