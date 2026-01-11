@@ -4,7 +4,37 @@ const Storage = {
     set: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
     clear: () => localStorage.clear()
 };
+// --- LÓGICA DE PANTALLA DE CARGA ---
+window.addEventListener('load', () => {
+    // Esperamos 2.5 segundos (2500 ms)
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        const app = document.getElementById('app-container');
 
+        // 1. Desvanecer splash
+        splash.style.opacity = '0';
+
+        // 2. Esperar a que termine la transición CSS (0.5s) y borrarlo
+        setTimeout(() => {
+            splash.style.display = 'none';
+            // 3. Mostrar App y animar entrada
+            app.style.display = 'block';
+            app.style.animation = 'fadeInApp 0.5s ease forwards';
+        }, 500);
+
+    }, 2500);
+});
+
+// Agregar esta animación CSS dinámicamente o ponerla en style.css
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+@keyframes fadeInApp {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}`;
+document.head.appendChild(styleSheet);
+
+// ... AQUÍ SIGUE EL RESTO DE TU CÓDIGO (Storage, Navigation, etc.) ...
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
     loadEvents();
