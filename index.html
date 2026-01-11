@@ -4,21 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agenda Personal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png"> <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#24496E"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="app-container">
-        
-        <header>
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="icon.png" alt="Logo" class="splash-logo">
+            <div class="loading-container">
+                <div class="loading-bar"></div>
+            </div>
+            <p>Cargando tu agenda...</p>
+        </div>
+    </div>
+
+    <div id="app-container" style="display: none;"> <header>
             <div class="header-left">
                 <button id="menu-btn"><i class="fas fa-bars"></i></button>
                 <h2 id="page-title">Mis Tareas</h2>
             </div>
             <div class="header-right">
-                <button id="notif-btn" onclick="requestNotificationPermission()" title="Activar notificaciones"><i class="far fa-bell"></i></button>
+                <button id="notif-btn" onclick="requestNotificationPermission()"><i class="far fa-bell"></i></button>
             </div>
         </header>
 
@@ -43,22 +54,18 @@
         <main>
             <section id="tasks-section" class="view active-view">
                 <div class="hint-text">Arrastra las tareas para ordenarlas</div>
-                <div id="task-list">
-                    </div>
+                <div id="task-list"></div>
                 <div class="empty-state" id="empty-tasks" style="display:none;">
                     <i class="fas fa-clipboard-check"></i>
                     <p>No hay tareas pendientes</p>
                 </div>
-                
                 <div class="fab-container">
                     <button class="fab" onclick="openModal('task-modal')"><i class="fas fa-plus"></i></button>
                 </div>
             </section>
 
             <section id="calendar-section" class="view">
-                <div class="section-header">
-                    <h3>Próximos Eventos</h3>
-                </div>
+                <div class="section-header"><h3>Próximos Eventos</h3></div>
                 <div id="event-list"></div>
                 <div class="fab-container">
                     <button class="fab" onclick="openModal('event-modal')"><i class="fas fa-plus"></i></button>
@@ -66,9 +73,7 @@
             </section>
 
             <section id="readings-section" class="view">
-                <div class="section-header">
-                    <h3>Bibliografía</h3>
-                </div>
+                <div class="section-header"><h3>Bibliografía</h3></div>
                 <div id="readings-list"></div>
                 <div class="fab-container">
                     <button class="fab" onclick="openModal('reading-modal')"><i class="fas fa-plus"></i></button>
@@ -85,7 +90,6 @@
                             <button id="reset-timer" onclick="resetPomodoro()"><i class="fas fa-redo"></i></button>
                         </div>
                     </div>
-                    
                     <div class="session-creator">
                         <h4>Guardar Sesión</h4>
                         <div class="input-group">
@@ -109,11 +113,10 @@
             </div>
         </div>
     </div>
-
     <div id="event-modal" class="modal">
         <div class="modal-content">
             <h3>Nuevo Evento</h3>
-            <input type="text" id="event-title" placeholder="Título (ej: Final Psicología)">
+            <input type="text" id="event-title" placeholder="Título">
             <input type="date" id="event-date">
             <div class="modal-actions">
                 <button onclick="closeModal('event-modal')" class="btn-cancel">Cancelar</button>
@@ -121,11 +124,10 @@
             </div>
         </div>
     </div>
-
     <div id="reading-modal" class="modal">
         <div class="modal-content">
             <h3>Nueva Lectura</h3>
-            <input type="text" id="reading-title" placeholder="Título del texto/libro">
+            <input type="text" id="reading-title" placeholder="Título">
             <div class="modal-actions">
                 <button onclick="closeModal('reading-modal')" class="btn-cancel">Cancelar</button>
                 <button onclick="addReading()" class="btn-confirm">Guardar</button>
