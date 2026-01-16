@@ -2,12 +2,17 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
     <title>Agenda Personal</title>
     
     <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png"> <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#24496E"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#24496E">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -23,13 +28,17 @@
         </div>
     </div>
 
-    <div id="app-container" style="display: none;"> <header>
+    <div id="app-container" style="display: none;">
+        
+        <header>
             <div class="header-left">
                 <button id="menu-btn"><i class="fas fa-bars"></i></button>
                 <h2 id="page-title">Mis Tareas</h2>
             </div>
             <div class="header-right">
-                <button id="notif-btn" onclick="requestNotificationPermission()"><i class="far fa-bell"></i></button>
+                <button id="notif-btn" onclick="requestNotificationPermission()" aria-label="Activar notificaciones">
+                    <i class="far fa-bell"></i>
+                </button>
             </div>
         </header>
 
@@ -53,7 +62,7 @@
 
         <main>
             <section id="tasks-section" class="view active-view">
-                <div class="hint-text">Arrastra las tareas para ordenarlas</div>
+                <div class="hint-text">Mantené presionado para ordenar</div>
                 <div id="task-list"></div>
                 <div class="empty-state" id="empty-tasks" style="display:none;">
                     <i class="fas fa-clipboard-check"></i>
@@ -81,19 +90,35 @@
             </section>
 
             <section id="pomodoro-section" class="view">
+                
+                <div class="pomodoro-info-card" id="pomo-info">
+                    <div class="pomo-info-header">
+                        <h4>¿Cómo funciona?</h4>
+                        <button onclick="document.getElementById('pomo-info').style.display='none'"><i class="fas fa-times"></i></button>
+                    </div>
+                    <p>
+                        <strong>1.</strong> Elegí una tarea.<br>
+                        <strong>2.</strong> Trabajá <strong>25 min</strong> (1 Pomodoro).<br>
+                        <strong>3.</strong> Descansá <strong>5 min</strong>.<br>
+                        <strong>4.</strong> Cada 4 Pomodoros, tomá un descanso largo (15-30 min).
+                    </p>
+                </div>
+
                 <div class="pomodoro-container">
                     <div class="timer-card">
                         <div class="timer-display" id="timer">25:00</div>
+                        <div class="timer-status" id="timer-status">Listo para enfocar</div>
                         <div class="timer-controls">
                             <button id="start-timer" onclick="startPomodoro()"><i class="fas fa-play"></i></button>
                             <button id="pause-timer" onclick="pausePomodoro()"><i class="fas fa-pause"></i></button>
                             <button id="reset-timer" onclick="resetPomodoro()"><i class="fas fa-redo"></i></button>
                         </div>
                     </div>
+                    
                     <div class="session-creator">
                         <h4>Guardar Sesión</h4>
                         <div class="input-group">
-                            <input type="text" id="pomo-session-name" placeholder="Ej: Unidad 1">
+                            <input type="text" id="pomo-session-name" placeholder="Ej: Unidad 1 - Repaso">
                             <button onclick="savePomodoroSession()">Guardar</button>
                         </div>
                     </div>
