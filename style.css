@@ -1,22 +1,23 @@
 :root {
     --primary: #24496E;
-    --bg: #F2F2F7;          /* Gris Sistema iOS */
-    --card-bg: #FFFFFF;     /* Blanco puro para tarjetas */
+    --bg: #F2F2F7;
+    --card-bg: #FFFFFF;
     --accent: #A0B9C5;
-    --text: #1C1C1E;        /* Negro casi puro iOS */
+    --text: #1C1C1E;
     --text-secondary: #8E8E93;
-    --danger: #FF3B30;      /* Rojo iOS */
-    --success: #34C759;     /* Verde iOS */
+    --danger: #FF3B30;
+    --success: #34C759;
     --warning: #FFCC00;
-    --radius: 12px;         /* Radio de borde más sutil */
-    --shadow: 0 1px 3px rgba(0,0,0,0.1); /* Sombra sutil */
+    --info-bg: #E3F2FD; /* Fondo azulito para info */
+    --info-text: #0D47A1;
+    --radius: 12px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    /* Pila de fuentes nativas (San Francisco en Apple, Roboto en Android, etc.) */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
@@ -24,32 +25,36 @@
 body {
     background-color: var(--bg);
     color: var(--text);
-    height: 100vh;
+    /* FIX MOBILE: Usar altura dinámica real */
+    height: 100dvh; 
+    width: 100vw;
     overflow: hidden;
 }
 
 /* Header */
 header {
-    background: var(--bg); /* Transparente/Gris fondo */
+    background: rgba(242, 242, 247, 0.85);
     padding: 15px 20px;
+    padding-top: max(15px, env(safe-area-inset-top)); /* Ajuste para Notch */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Efecto blur tipo iOS */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     position: sticky; top: 0; z-index: 10;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 .header-left { display: flex; align-items: center; gap: 15px; }
-header h2 { color: var(--text); font-weight: 700; font-size: 1.7rem; letter-spacing: -0.5px; }
-#menu-btn { background: none; border: none; font-size: 1.4rem; color: var(--primary); cursor: pointer; }
-#notif-btn { background: none; border: none; font-size: 1.2rem; color: var(--primary); cursor: pointer; }
+header h2 { color: var(--text); font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; }
+#menu-btn, #notif-btn { background: none; border: none; font-size: 1.3rem; color: var(--primary); cursor: pointer; padding: 5px; }
 
 /* Main */
 main {
-    height: calc(100vh - 70px);
+    /* FIX MOBILE: Calcular altura restando header */
+    height: calc(100dvh - 70px);
     overflow-y: auto;
-    padding: 10px 0 90px 0;
+    overflow-x: hidden;
+    padding: 10px 0 100px 0; /* Extra padding abajo para que nada quede tapado */
 }
 .view { display: none; padding: 0 16px; animation: fadeIn 0.3s ease; }
 .view.active-view { display: block; }
@@ -58,17 +63,18 @@ main {
 /* Sidebar */
 #sidebar {
     position: fixed; top: 0; left: -280px;
-    width: 280px; height: 100%;
+    width: 280px; height: 100dvh; /* Full height */
     background: var(--card-bg);
     color: var(--text);
     z-index: 200;
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 25px;
+    padding-top: max(25px, env(safe-area-inset-top));
     box-shadow: 5px 0 25px rgba(0,0,0,0.1);
 }
 #sidebar.open { left: 0; }
 #sidebar-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
     background: rgba(0,0,0,0.3); z-index: 150; display: none;
     backdrop-filter: blur(2px);
 }
@@ -79,7 +85,7 @@ main {
 .danger-item { color: var(--danger); margin-top: 20px; border-bottom: none !important; }
 
 /* FAB */
-.fab-container { position: fixed; bottom: 30px; right: 25px; z-index: 20; }
+.fab-container { position: fixed; bottom: 30px; right: 25px; z-index: 20; padding-bottom: env(safe-area-inset-bottom); }
 .fab {
     width: 56px; height: 56px;
     background: var(--primary);
@@ -89,59 +95,38 @@ main {
     cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 
-/* --- TAREAS --- */
-.hint-text { text-align: center; color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 10px; }
+/* TAREAS */
+.hint-text { text-align: center; color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 15px; }
 .empty-state { text-align: center; color: var(--text-secondary); margin-top: 60px; }
 .empty-state i { font-size: 3rem; margin-bottom: 10px; opacity: 0.3; }
 
 #task-list { padding-bottom: 20px; }
 .task-item {
     background: var(--card-bg);
-    padding: 16px;
-    margin-bottom: 10px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    display: flex; align-items: center;
-    /* Icono de agarre para drag */
-    cursor: grab;
+    padding: 16px; margin-bottom: 10px; border-radius: var(--radius);
+    box-shadow: var(--shadow); display: flex; align-items: center; cursor: grab;
 }
-.task-item:active { cursor: grabbing; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(1.02); transition: 0.2s; }
+.task-item:active { cursor: grabbing; transform: scale(1.02); transition: 0.2s; }
 .task-checkbox {
-    width: 24px; height: 24px;
-    border: 2px solid #D1D1D6;
-    border-radius: 50%; /* Checkbox redondo estilo iOS Reminders */
-    margin-right: 15px;
-    flex-shrink: 0;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer;
+    width: 24px; height: 24px; border: 2px solid #D1D1D6; border-radius: 50%;
+    margin-right: 15px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; cursor: pointer;
 }
 .task-checkbox.checked { background: var(--primary); border-color: var(--primary); }
 .task-checkbox.checked::after { content: '✔'; color: white; font-size: 12px; }
-.task-text { flex-grow: 1; font-size: 1rem; color: var(--text); line-height: 1.4; }
+.task-text { flex-grow: 1; font-size: 1rem; color: var(--text); line-height: 1.4; word-break: break-word; }
 .task-text.completed { text-decoration: line-through; color: var(--text-secondary); }
 .delete-btn { color: #C7C7CC; background: none; border: none; padding: 10px; cursor: pointer; }
 .delete-btn:hover { color: var(--danger); }
 
-/* --- CALENDARIO Y LECTURAS --- */
-.section-header h3 { margin-bottom: 15px; color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; font-weight: 600; padding-left: 5px;}
-
+/* EVENTOS Y LECTURAS */
+.section-header h3 { margin-bottom: 15px; color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; font-weight: 600; padding-left: 5px; }
 .event-card, .reading-card {
-    background: var(--card-bg);
-    padding: 16px;
-    border-radius: var(--radius);
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-    position: relative;
+    background: var(--card-bg); padding: 16px; border-radius: var(--radius);
+    margin-bottom: 12px; box-shadow: var(--shadow); position: relative;
 }
-
-/* Eventos */
-.event-date { 
-    font-size: 0.85rem; color: var(--danger); font-weight: 600; 
-    margin-bottom: 4px; text-transform: uppercase;
-}
+.event-date { font-size: 0.85rem; color: var(--danger); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
 .event-title { font-size: 1.1rem; font-weight: 500; }
 
-/* Lecturas */
 .reading-card { border-left: 4px solid var(--primary); }
 .reading-title { font-weight: 500; margin-bottom: 12px; }
 .reading-actions { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -153,26 +138,59 @@ main {
 .status-btn.active-read { background: #34C759; border-color: #34C759; color: white; }
 .status-btn.active-summary { background: var(--primary); border-color: var(--primary); color: white; }
 
-/* --- POMODORO --- */
-.pomodoro-container { text-align: center; margin-top: 10px; }
-.timer-card { background: var(--card-bg); padding: 30px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 25px; }
-.timer-display { font-size: 4rem; font-weight: 200; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -2px; }
-.timer-controls button {
-    width: 55px; height: 55px; border-radius: 50%; border: none; margin: 0 10px; font-size: 1.1rem;
-    background: #F2F2F7; color: var(--primary); cursor: pointer;
+/* POMODORO */
+/* --- NUEVA TARJETA DE INFO --- */
+.pomodoro-info-card {
+    background-color: var(--info-bg);
+    color: var(--info-text);
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    border: 1px solid rgba(13, 71, 161, 0.1);
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
-#start-timer { background: var(--primary); color: white; }
+.pomo-info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.pomo-info-header h4 { font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
+.pomo-info-header button { background: none; border: none; color: var(--info-text); opacity: 0.6; font-size: 1rem; cursor: pointer; }
+
+.pomodoro-container { text-align: center; }
+.timer-card { background: var(--card-bg); padding: 30px 20px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 25px; }
+.timer-display { font-size: 4rem; font-weight: 200; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+.timer-status { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+.timer-controls button {
+    width: 60px; height: 60px; border-radius: 50%; border: none; margin: 0 8px; font-size: 1.2rem;
+    background: #F2F2F7; color: var(--primary); cursor: pointer; transition: transform 0.1s;
+}
+.timer-controls button:active { transform: scale(0.95); }
+#start-timer { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(36,73,110,0.3); }
 
 .saved-session-item {
     background: var(--card-bg); padding: 12px 16px; margin-top: 8px; border-radius: 10px;
     display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow);
 }
+.session-creator h4 { margin-bottom: 10px; color: var(--text-secondary); font-size: 0.9rem; }
+.input-group { display: flex; gap: 10px; }
+.input-group input { flex-grow: 1; padding: 12px; border-radius: 10px; border: none; background: #F2F2F7; }
+.input-group button { background: var(--accent); color: white; border: none; padding: 0 20px; border-radius: 10px; font-weight: 600; }
 
-/* Modales */
+/* SPLASH SCREEN & MODALS */
+#splash-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--primary); z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease-out;
+}
+.splash-content { text-align: center; width: 80%; max-width: 300px; }
+.splash-logo { width: 120px; height: 120px; border-radius: 24px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: pulse 2.5s infinite ease-in-out; }
+.loading-container { width: 100%; height: 6px; background-color: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+.loading-bar { width: 0%; height: 100%; background-color: #F3EFDC; border-radius: 10px; animation: loadProgress 2.5s ease-in-out forwards; }
+.splash-content p { color: white; font-size: 0.9rem; letter-spacing: 1px; opacity: 0.8; }
+
 .modal {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4); z-index: 300;
-    align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.4); z-index: 300; align-items: center; justify-content: center;
     backdrop-filter: blur(5px);
 }
 .modal.active { display: flex; }
@@ -181,80 +199,14 @@ main {
     border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-@keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.modal h3 { margin-bottom: 20px; text-align: center; }
-.modal input {
-    width: 100%; padding: 12px; margin-bottom: 20px; background: #F2F2F7;
-    border: none; border-radius: 10px; font-size: 1rem;
-}
+.modal h3 { margin-bottom: 20px; text-align: center; color: var(--primary); }
+.modal input { width: 100%; padding: 12px; margin-bottom: 20px; background: #F2F2F7; border: none; border-radius: 10px; font-size: 1rem; }
 .modal-actions { display: flex; gap: 10px; }
-.modal-actions button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer;}
+.modal-actions button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
 .btn-cancel { background: #F2F2F7; color: var(--text); }
 .btn-confirm { background: var(--primary); color: white; }
-/* --- PANTALLA DE CARGA (SPLASH SCREEN) --- */
-#splash-screen {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: var(--primary); /* Azul de la marca */
-    z-index: 9999; /* Siempre encima de todo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.5s ease-out; /* Efecto desvanecimiento al irse */
-}
 
-.splash-content {
-    text-align: center;
-    width: 80%;
-    max-width: 300px;
-}
-
-.splash-logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 24px; /* Bordes redondeados estilo iOS */
-    margin-bottom: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    /* Animación sutil de respiración */
-    animation: pulse 2.5s infinite ease-in-out;
-}
-
-.loading-container {
-    width: 100%;
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 15px;
-}
-
-.loading-bar {
-    width: 0%;
-    height: 100%;
-    background-color: #F3EFDC; /* Color crema del logo */
-    border-radius: 10px;
-    /* La animación de 2.5s */
-    animation: loadProgress 2.5s ease-in-out forwards;
-}
-
-.splash-content p {
-    color: white;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    opacity: 0.8;
-}
-
-/* Animaciones Keyframes */
-@keyframes loadProgress {
-    0% { width: 0%; }
-    50% { width: 60%; }
-    100% { width: 100%; }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
+@keyframes loadProgress { 0% { width: 0%; } 50% { width: 60%; } 100% { width: 100%; } }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+@keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fadeInApp { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
